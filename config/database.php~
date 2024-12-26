@@ -81,8 +81,8 @@ return [
         'sqlsrv' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),
-            'host' => '192.168.100.171',
-            'port' => '1433',
+            'host' => env('DB_HOST', 'localhost'),
+            'port' => env('DB_PORT', '1433'),
             'database' => 'SDMSMIRROR',
             'username' => 'sa',
             'password' => 'dataport',
