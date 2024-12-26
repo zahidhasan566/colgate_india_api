@@ -1,0 +1,43 @@
+<?php
+namespace App\Providers;
+
+use Illuminate\Contracts\Auth\UserProvider;
+use Illuminate\Contracts\Auth\Authenticatable;
+
+class CustomUserProvider implements UserProvider
+{
+    public function retrieveById($identifier)
+    {
+        return (object) ['id' => $identifier, 'username' => config('auth_credentials.username')];
+    }
+
+    public function retrieveByToken($identifier, $token)
+    {
+        // Not applicable for this custom setup
+    }
+
+    public function updateRememberToken(Authenticatable $user, $token)
+    {
+        // Not applicable for this custom setup
+    }
+
+    public function retrieveByCredentials(array $credentials)
+    {
+        $storedUsername = config('auth_credentials.username');
+        $storedPassword = config('auth_credentials.password');
+
+        if (
+            $credentials['username'] === $storedUsername &&
+            $credentials['password'] === $storedPassword
+        ) {
+            return (object) ['id' => 1, 'username' => $storedUsername];
+        }
+
+        return null;
+    }
+
+    public function validateCredentials(Authenticatable $user, array $credentials)
+    {
+        return true;
+    }
+}
