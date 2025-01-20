@@ -25,10 +25,11 @@ class AuthController extends Controller
     use CommonTrait;
     public function login(Request $request)
     {
+
         $configCredentials = config('credentials');
 
-        $inputUsername = $request->input('username');
-        $inputPassword = $request->input('password');
+        $inputUsername =  $request->header('username');
+        $inputPassword = $request->header('Password');
 
         if ($inputUsername === $configCredentials['username'] && $inputPassword === $configCredentials['password']) {
             // Create a JWTSubject instance

@@ -8,6 +8,7 @@ use App\Models\DealarInvoiceDetails;
 use App\Models\User;
 use App\Models\YSparkLogin;
 use App\Models\YSparkSmsLog;
+use App\Services\JWTCustomSubject;
 use App\Traits\CommonTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -24,14 +25,18 @@ class AuthController extends Controller
     use CommonTrait;
     public function login(Request $request)
     {
+        
         $configCredentials = config('credentials');
 
-        $inputUsername = $request->input('username');
-        $inputPassword = $request->input('password');
+        $inputUsername =  $request->header('username');
+        $inputPassword = $request->header('Password');
 
         if ($inputUsername === $configCredentials['username'] && $inputPassword === $configCredentials['password']) {
-            // Generate token manually
-            $token = JWTAuth::fromUser((object) ['id' => 1, 'username' => $inputUsername]);
+            // Create a JWTSubject instance
+            $customUser = new JWTCustomSubject(1, $inputUsername);
+
+            // Generate token
+            $token = JWTAuth::fromUser($customUser);
 
             return response()->json([
                 'success' => true,
