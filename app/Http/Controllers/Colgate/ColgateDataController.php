@@ -26,16 +26,16 @@ class ColgateDataController extends Controller
             $dateTo = $request->dateTo;
             // Parse the input dates using Carbon
             $dateFromObj = Carbon::parse($dateFrom);
-            $dateToObj = Carbon::parse($dateTo);
+            $dateToObj = Carbon::parse($dateTo)->subHours(24); // Subtracting 24 hours
 
             // Calculate the difference in days
             $daysDifference = $dateFromObj->diffInDays($dateToObj);
 
-            // Validate the range
-            if ($daysDifference > 3) {
-                return response()->json(['status' => 406, 'message' => "The date range cannot exceed 3 days."]);
+             // Validate the range
+            if ($daysDifference >= 1) {
+                return response()->json(['status' => 406, 'message' => "The date range cannot exceed 1 day."]);
             } else {
-                $data = DB::select("exec usp_loadColgateIndiaApiData '$dateFrom','$dateTo'");
+                $data = DB::select("exec usp_loadColgateIndiaApiData '$dateFrom', '$dateToObj'");
                 return response()->json($data, 200);
             }
 
