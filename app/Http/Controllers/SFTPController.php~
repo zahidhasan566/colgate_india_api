@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Services\SFTPService;
+use Illuminate\Http\Request;
+
+class SFTPController extends Controller
+{
+    protected $sftpService;
+
+    public function __construct(SFTPService $sftpService)
+    {
+        $this->sftpService = $sftpService;
+    }
+}

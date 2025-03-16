@@ -33,7 +33,7 @@ class ColgateDataController extends Controller
 
             // Validate the range
             if ($daysDifference > 3) {
-                return response()->json(['status' => 401, 'message' => "The date range cannot exceed 3 days."]);
+                return response()->json(['status' => 406, 'message' => "The date range cannot exceed 3 days."]);
             } else {
                 $data = DB::select("exec usp_loadColgateIndiaApiData '$dateFrom','$dateTo'");
                 return response()->json($data, 200);
@@ -41,7 +41,7 @@ class ColgateDataController extends Controller
 
         }
         catch (\Exception $exception) {
-            return response()->json([
+            return response()->json([[]
                 'status' => 'error',
                 'message' => 'Something went wrong!' . $exception->getMessage() . '-' . $exception->getLine()
             ], 500);
