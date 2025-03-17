@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0,minimal-ui">
-    <title>WELCOME TO Y SPARK </title>
+    <title>WELCOME TO COLAGTE DATE </title>
     <meta content="Admin Dashboard" name="description">
     <meta content="Themesbrand" name="author">
     <link rel="preconnect" href="https://fonts.googleapis.com">

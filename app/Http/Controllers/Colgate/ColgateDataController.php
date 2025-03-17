@@ -2,16 +2,24 @@
 
 namespace App\Http\Controllers\Colgate;
 
+use App\Exports\ColgateDataExport;
 use App\Http\Controllers\Controller;
+use App\Services\SFTPService;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ColgateDataController extends Controller
 {
+    public $sftpService;
+    public function __construct(SFTPService $sftpService)
+    {
+        $this->sftpService = $sftpService;
+    }
     public function getData(Request $request){
         $validator = Validator::make($request->all(), [
             'dateFrom' => 'required',
@@ -22,11 +30,11 @@ class ColgateDataController extends Controller
         }
         try{
 
-            $dateFrom = $request->dateFrom;
-            $dateTo = $request->dateTo;
+//            $dateFrom = $request->dateFrom;
+//            $dateTo = $request->dateTo;
             // Parse the input dates using Carbon
-            $dateFromObj = Carbon::parse($dateFrom);
-            $dateToObj = Carbon::parse($dateTo)->subHours(24); // Subtracting 24 hours
+            $dateToObj = Carbon::now(); // Current date and time
+            $dateFromObj = $dateToObj->copy()->subHours(24); // Subtract 24 hours
 
             // Calculate the difference in days
             $daysDifference = $dateFromObj->diffInDays($dateToObj);
@@ -35,7 +43,7 @@ class ColgateDataController extends Controller
             if ($daysDifference >= 1) {
                 return response()->json(['status' => 406, 'message' => "The date range cannot exceed 1 day."]);
             } else {
-                $data = DB::select("exec usp_loadColgateIndiaApiData '$dateFrom', '$dateToObj'");
+                $data = DB::select("exec usp_loadColgateIndiaApiData '$dateFromObj', '$dateToObj'");
                 return response()->json($data, 200);
             }
 
@@ -48,5 +56,35 @@ class ColgateDataController extends Controller
         }
 
 
+    }
+
+
+    public function getColgateData(){
+        try {
+            // Generate Excel file
+            $fileName = 'colgate_data_' . now()->format('Y-m-d_H-i-s') . '.xlsx';
+            $filePath = storage_path("app/exports/{$fileName}");
+
+            // Store the file in the storage directory
+            Excel::store(new ColgateDataExport(), "exports/{$fileName}");
+
+            // Check if the file exists
+            if (!file_exists($filePath)) {
+                return response()->json([
+                    'message' => 'No file!'
+                ],500);
+            }
+
+//            $this->info("Uploading file to SFTP...");
+            $this->sftpService->uploadFile($filePath, $fileName);
+            return response()->json([
+                'message' => 'Success'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => $e->getMessage()
+            ],500);
+        }
     }
 }

@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('colgate-data-sync', [\App\Http\Controllers\Colgate\ColgateDataController::class, 'getColgateData']);
+
 Route::post('login', [\App\Http\Controllers\Auth\AuthController::class, 'login']);
 
 
