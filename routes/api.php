@@ -16,18 +16,18 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('colgate-data-sync', [\App\Http\Controllers\Colgate\ColgateDataController::class, 'getColgateData']);
 
-Route::post('login', [\App\Http\Controllers\Auth\AuthController::class, 'login']);
-
-
-Route::group(['middleware' => ['jwt','throttle:10000,1']], function () {
-    Route::post('logout', [\App\Http\Controllers\Auth\AuthController::class, 'logout']);
-    Route::post('refresh', [\App\Http\Controllers\Auth\AuthController::class, 'refresh']);
-    Route::post('me', [\App\Http\Controllers\Auth\AuthController::class, 'me']);
-    Route::get('app-supporting-data', [\App\Http\Controllers\Common\HelperController::class, 'appSupportingData']);
-});
-
-
-Route::middleware('auth:api')->group(function () {
-    Route::post('colgate-data', [\App\Http\Controllers\Colgate\ColgateDataController::class, 'getData']);
-});
+//Route::post('login', [\App\Http\Controllers\Auth\AuthController::class, 'login']);
+//
+//
+//Route::group(['middleware' => ['jwt','throttle:10000,1']], function () {
+//    Route::post('logout', [\App\Http\Controllers\Auth\AuthController::class, 'logout']);
+//    Route::post('refresh', [\App\Http\Controllers\Auth\AuthController::class, 'refresh']);
+//    Route::post('me', [\App\Http\Controllers\Auth\AuthController::class, 'me']);
+//    Route::get('app-supporting-data', [\App\Http\Controllers\Common\HelperController::class, 'appSupportingData']);
+//});
+//
+//
+//Route::middleware('auth:api')->group(function () {
+//    Route::post('colgate-data', [\App\Http\Controllers\Colgate\ColgateDataController::class, 'getData']);
+//});
 
