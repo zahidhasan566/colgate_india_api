@@ -69,7 +69,7 @@ class ColgateDataController extends Controller
 //            Excel::store(new ColgateDataExport(), "exports/{$fileName}");
             Excel::store(new ColgateDataExport(), "exports/{$fileName}", null, \Maatwebsite\Excel\Excel::CSV,    [
                 'delimiter' => ',',     // comma-separated
-                'enclosure' => '',      // no double quotes
+                'enclosure' => '`',       // no double quotes
                 'use_bom'   => true,    // optional: helps with UTF-8 support in Excel
             ]);
 
