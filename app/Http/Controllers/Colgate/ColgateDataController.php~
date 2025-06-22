@@ -62,12 +62,16 @@ class ColgateDataController extends Controller
     public function getColgateData(){
         try {
             // Generate Excel file
-            $fileName = 'colgate_data_' . now()->format('Y-m-d_H-i-s') . '.csv';
+            $fileName = 'colgate_data' . now()->format('Y-m-d_H-i-s') . '.csv';
             $filePath = storage_path("app/exports/{$fileName}");
 
             // Store the file in the storage directory
 //            Excel::store(new ColgateDataExport(), "exports/{$fileName}");
-            Excel::store(new ColgateDataExport(), "exports/{$fileName}", null, \Maatwebsite\Excel\Excel::CSV);
+            Excel::store(new ColgateDataExport(), "exports/{$fileName}", null, \Maatwebsite\Excel\Excel::CSV,    [
+                'delimiter' => ',',     // comma-separated
+                'enclosure' => '',      // no double quotes
+                'use_bom'   => true,    // optional: helps with UTF-8 support in Excel
+            ]);
 
 
             // Check if the file exists
