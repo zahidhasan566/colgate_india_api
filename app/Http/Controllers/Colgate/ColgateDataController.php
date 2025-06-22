@@ -63,7 +63,7 @@ class ColgateDataController extends Controller
     public function getColgateData(){
         try {
             // Generate Excel file
-            $fileName = 'colgate_data_upp' . now()->format('Y-m-d_H-i-s') . '.csv';
+            $fileName = 'colgate_data' . now()->format('Y-m-d_H-i-s') . '.csv';
             $filePath = storage_path("app/exports/{$fileName}");
 
             // Store the file in the storage directory
@@ -73,14 +73,16 @@ class ColgateDataController extends Controller
 //                'enclosure' => '`',       // no double quotes
 //                'use_bom'   => true,    // optional: helps with UTF-8 support in Excel
 //            ]);
-            $dateFrom = '2025-04-01 00:00:00';
-            $dateTo = '2025-04-30 23:59:59';
+
+            //        $dateToObj = Carbon::now();
+//        $dateFromObj = $dateToObj->copy()->subHours(24);
+//            $dateFrom = '2025-04-01 00:00:00';
+//            $dateTo = '2025-04-30 23:59:59';
+
+            $dateTo =  Carbon::now();
+            $dateFrom =  $dateTo->copy()->subHours(24);
 
             $data = collect(DB::select("exec usp_loadColgateIndiaApiData '$dateFrom', '$dateTo'"));
-
-// File path in local storage
-            $fileName = 'colgate_data.csv';
-            $filePath = storage_path("app/exports/{$fileName}");
 
 // Make sure directory exists
             Storage::makeDirectory('exports');
