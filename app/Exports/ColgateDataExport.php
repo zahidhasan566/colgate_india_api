@@ -12,8 +12,8 @@ class ColgateDataExport implements FromCollection,WithHeadings
 {
     public function collection()
     {
-        $dateToObj = Carbon::now();
-        $dateFromObj = $dateToObj->copy()->subHours(24);
+//        $dateToObj = Carbon::now();
+//        $dateFromObj = $dateToObj->copy()->subHours(24);
 
         $dateToObj = '2025-04-07';
         $dateFromObj = '2025-04-08';
@@ -25,8 +25,8 @@ class ColgateDataExport implements FromCollection,WithHeadings
 
     public function headings(): array
     {
-        $dateToObj = Carbon::now();
-        $dateFromObj = $dateToObj->copy()->subHours(24);
+//        $dateToObj = Carbon::now();
+//        $dateFromObj = $dateToObj->copy()->subHours(24);
 
         $dateToObj = '2025-04-07';
         $dateFromObj = '2025-04-08';
