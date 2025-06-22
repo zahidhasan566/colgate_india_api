@@ -6,11 +6,15 @@ use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class ColgateDataExport implements FromCollection,WithHeadings
 {
     public function collection()
     {
+        $dateToObj = Carbon::now();
+        $dateFromObj = $dateToObj->copy()->subHours(24);
+
         $dateToObj = Carbon::now();
         $dateFromObj = $dateToObj->copy()->subHours(24);
 

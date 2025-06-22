@@ -67,7 +67,11 @@ class ColgateDataController extends Controller
 
             // Store the file in the storage directory
 //            Excel::store(new ColgateDataExport(), "exports/{$fileName}");
-            Excel::store(new ColgateDataExport(), "exports/{$fileName}", null, \Maatwebsite\Excel\Excel::CSV);
+            Excel::store(new ColgateDataExport(), "exports/{$fileName}", null, \Maatwebsite\Excel\Excel::CSV,    [
+                'delimiter' => ',',     // comma-separated
+                'enclosure' => '',      // no double quotes
+                'use_bom'   => true,    // optional: helps with UTF-8 support in Excel
+            ]);
 
 
             // Check if the file exists

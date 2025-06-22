@@ -15,6 +15,9 @@ class ColgateDataExport implements FromCollection,WithHeadings
         $dateToObj = Carbon::now();
         $dateFromObj = $dateToObj->copy()->subHours(24);
 
+        $dateToObj = '2025-04-07';
+        $dateFromObj = '2025-04-08';
+
         $data = collect(DB::select("exec usp_loadColgateIndiaApiData '$dateFromObj','$dateToObj'"));
 
         return $data;
@@ -24,6 +27,9 @@ class ColgateDataExport implements FromCollection,WithHeadings
     {
         $dateToObj = Carbon::now();
         $dateFromObj = $dateToObj->copy()->subHours(24);
+
+        $dateToObj = '2025-04-07';
+        $dateFromObj = '2025-04-08';
 
         $data = collect(DB::select("exec usp_loadColgateIndiaApiData '$dateFromObj','$dateToObj'"));
 

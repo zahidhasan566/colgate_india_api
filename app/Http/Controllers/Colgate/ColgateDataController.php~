@@ -62,11 +62,13 @@ class ColgateDataController extends Controller
     public function getColgateData(){
         try {
             // Generate Excel file
-            $fileName = 'colgate_data_' . now()->format('Y-m-d_H-i-s') . '.xlsx';
+            $fileName = 'colgate_data_' . now()->format('Y-m-d_H-i-s') . '.csv';
             $filePath = storage_path("app/exports/{$fileName}");
 
             // Store the file in the storage directory
-            Excel::store(new ColgateDataExport(), "exports/{$fileName}");
+//            Excel::store(new ColgateDataExport(), "exports/{$fileName}");
+            Excel::store(new ColgateDataExport(), "exports/{$fileName}", null, \Maatwebsite\Excel\Excel::CSV);
+
 
             // Check if the file exists
             if (!file_exists($filePath)) {
@@ -77,7 +79,9 @@ class ColgateDataController extends Controller
 
 //            $this->info("Uploading file to SFTP...");
             $this->sftpService->uploadFile($filePath, $fileName);
-            $this->info("Process completed successfully!");
+            return response()->json([
+                'message' => 'Success'
+            ]);
 
         } catch (\Exception $e) {
             return response()->json([
