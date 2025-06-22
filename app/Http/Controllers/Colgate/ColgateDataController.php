@@ -91,10 +91,10 @@ class ColgateDataController extends Controller
                 $handle = fopen($filePath, 'w');
 
                 // Write headers and data without quotes
-                fputcsv($handle, $headers, ',', '');
+                fputcsv($handle, array_keys((array) $data->first()), ',', "\0");
 
                 foreach ($data as $row) {
-                    fputcsv($handle, array_values((array) $row), ',', '');
+                    fputcsv($handle, array_values((array) $row), ',', "\0");
                 }
 
                 fclose($handle);

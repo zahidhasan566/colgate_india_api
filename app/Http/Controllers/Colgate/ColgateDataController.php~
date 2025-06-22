@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -67,11 +68,37 @@ class ColgateDataController extends Controller
 
             // Store the file in the storage directory
 //            Excel::store(new ColgateDataExport(), "exports/{$fileName}");
-            Excel::store(new ColgateDataExport(), "exports/{$fileName}", null, \Maatwebsite\Excel\Excel::CSV,    [
-                'delimiter' => ',',     // comma-separated
-                'enclosure' => '`',       // no double quotes
-                'use_bom'   => true,    // optional: helps with UTF-8 support in Excel
-            ]);
+//            Excel::store(new ColgateDataExport(), "exports/{$fileName}", null, \Maatwebsite\Excel\Excel::CSV,    [
+//                'delimiter' => ',',     // comma-separated
+//                'enclosure' => '`',       // no double quotes
+//                'use_bom'   => true,    // optional: helps with UTF-8 support in Excel
+//            ]);
+            $dateFrom = '2025-04-01 00:00:00';
+            $dateTo = '2025-04-30 23:59:59';
+
+            $data = collect(DB::select("exec usp_loadColgateIndiaApiData '$dateFrom', '$dateTo'"));
+
+// File path in local storage
+            $fileName = 'colgate_data.csv';
+            $filePath = storage_path("app/exports/{$fileName}");
+
+// Make sure directory exists
+            Storage::makeDirectory('exports');
+
+            if ($data->isNotEmpty()) {
+                $headers = array_keys((array) $data->first());
+
+                $handle = fopen($filePath, 'w');
+
+                // Write headers and data without quotes
+                fputcsv($handle, array_keys((array) $data->first()), ',', "\0");
+
+                foreach ($data as $row) {
+                    fputcsv($handle, array_values((array) $row), ',', '');
+                }
+
+                fclose($handle);
+            }
 
 
             // Check if the file exists
