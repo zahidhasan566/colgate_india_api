@@ -63,7 +63,7 @@ class ColgateDataController extends Controller
     public function getColgateData(){
         try {
             // Generate Excel file
-            $fileName = 'colgate_data' . now()->format('Y-m-d') . '.csv';
+            $fileName = 'colgate_data_' . now()->format('Y-m-d') . '.csv';
             $filePath = storage_path("app/exports/{$fileName}");
 
             // Store the file in the storage directory
