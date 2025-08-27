@@ -110,7 +110,6 @@ class ColgateDataController extends Controller
             fclose($handle);
 
 // Always upload, even if the file is header-only
-            $this->info("Uploading file to SFTP...");
             $this->sftpService->uploadFile($filePath, $fileName);
             return response()->json([
                 'message' => 'Success'
